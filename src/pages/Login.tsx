@@ -28,39 +28,45 @@ export default function Login() {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-            <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-                {error && <p className="text-red-500 mb-4">{error}</p>}
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full mb-4 p-2 border rounded"
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full mb-4 p-2 border rounded"
-                    required
-                />
-                <button
-                    type="submit"
-                    className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-                >
-                    Login
-                </button>
-                <p className="mt-4 text-center text-gray-600">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 space-y-6">
+                <h2 className="text-3xl font-bold text-center text-gray-800">Sign In</h2>
+                {error && <p className="text-red-500 text-sm text-center bg-red-50 p-3 rounded-lg">{error}</p>}
+                <form onSubmit={handleLogin} className="space-y-5">
+                    <div>
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-colors bg-gray-50 text-gray-800 placeholder-gray-400"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-colors bg-gray-50 text-gray-800 placeholder-gray-400"
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-colors font-medium"
+                    >
+                        Login
+                    </button>
+                </form>
+                <p className="text-center text-gray-600 text-sm">
                     Don't have an account?{' '}
-                    <Link to="/register" className="text-blue-500 hover:underline">
+                    <Link to="/register" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
                         Register
                     </Link>
                 </p>
-            </form>
+            </div>
         </div>
     );
 }

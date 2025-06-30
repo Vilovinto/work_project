@@ -82,33 +82,58 @@ export default function ListDetails() {
     }, [id, user, fetchTasks, fetchRole]);
 
     return (
-        <div className="p-4 max-w-xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Tasks</h1>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-6">
+            <div className="max-w-2xl mx-auto space-y-6">
+                <h1 className="text-3xl font-bold text-center text-gray-800">Task Details</h1>
 
-            {role === 'Admin' && (
-                <>
-                    <div className="flex flex-col space-y-2 mb-4">
-                        <Input placeholder="Task title" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
-                        <Input placeholder="Task description" value={newDesc} onChange={e => setNewDesc(e.target.value)} />
-                        <Button onClick={addTask}>Add Task</Button>
-                    </div>
-                    <div className="flex mb-4">
-                        <Input placeholder="Collaborator email" value={collabEmail} onChange={e => setCollabEmail(e.target.value)} />
-                        <Button onClick={addCollaborator}>Add Collaborator</Button>
-                    </div>
-                </>
-            )}
+                {role === 'Admin' && (
+                    <>
+                        <div className="space-y-4 mb-6">
+                            <div className="flex flex-col space-y-4">
+                                <Input
+                                    placeholder="Task title"
+                                    value={newTitle}
+                                    onChange={e => setNewTitle(e.target.value)}
+                                    className="w-full"
+                                />
+                                <Input
+                                    placeholder="Task description"
+                                    value={newDesc}
+                                    onChange={e => setNewDesc(e.target.value)}
+                                    className="w-full"
+                                />
+                                <Button onClick={addTask} className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                                    Add Task
+                                </Button>
+                            </div>
+                            <div className="flex space-x-4">
+                                <Input
+                                    placeholder="Collaborator email"
+                                    value={collabEmail}
+                                    onChange={e => setCollabEmail(e.target.value)}
+                                    className="flex-1"
+                                />
+                                <Button onClick={addCollaborator} className="bg-green-600 text-white hover:bg-green-700">
+                                    Add Collaborator
+                                </Button>
+                            </div>
+                        </div>
+                    </>
+                )}
 
-            {tasks.map(task => (
-                <TaskItem
-                    key={task.id}
-                    title={task.title}
-                    description={task.description}
-                    completed={task.completed}
-                    onToggle={() => toggleTask(task)}
-                    onDelete={role === 'Admin' ? () => removeTask(task.id) : undefined}
-                />
-            ))}
+                <div className="space-y-4">
+                    {tasks.map(task => (
+                        <TaskItem
+                            key={task.id}
+                            title={task.title}
+                            description={task.description}
+                            completed={task.completed}
+                            onToggle={() => toggleTask(task)}
+                            onDelete={role === 'Admin' ? () => removeTask(task.id) : undefined}
+                        />
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

@@ -51,21 +51,37 @@ export default function Dashboard() {
     }, [user]);
 
     return (
-        <div className="p-4 max-w-xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Your Lists</h1>
-            <div className="flex space-x-2 mb-4">
-                <Input placeholder="New list title" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
-                <Button onClick={addList}>Add</Button>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-6">
+            <div className="max-w-2xl mx-auto space-y-6">
+                <h1 className="text-3xl font-bold text-center text-gray-800">Your To-Do Lists</h1>
+                <div className="flex space-x-4">
+                    <Input
+                        placeholder="New list title"
+                        value={newTitle}
+                        onChange={e => setNewTitle(e.target.value)}
+                        className="flex-1"
+                    />
+                    <Button onClick={addList} className="bg-blue-600 text-white hover:bg-blue-700">
+                        Add
+                    </Button>
+                </div>
+                <div className="space-y-4">
+                    {lists.map(list => (
+                        <ListCard
+                            key={list.id}
+                            title={list.title}
+                            onClick={() => navigate(`/list/${list.id}`)}
+                        >
+                            <Button
+                                onClick={() => removeList(list.id)}
+                                className="bg-red-500 text-white hover:bg-red-600 ml-4"
+                            >
+                                Delete
+                            </Button>
+                        </ListCard>
+                    ))}
+                </div>
             </div>
-            {lists.map(list => (
-                <ListCard
-                    key={list.id}
-                    title={list.title}
-                    onClick={() => navigate(`/list/${list.id}`)}
-                >
-                    <Button onClick={() => removeList(list.id)} className="bg-red-500 ml-2">Delete</Button>
-                </ListCard>
-            ))}
         </div>
     );
 }
