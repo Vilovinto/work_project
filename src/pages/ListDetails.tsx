@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { doc, getDoc, updateDoc, arrayUnion, addDoc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
@@ -23,13 +23,13 @@ export default function ListDetails() {
     const [role, setRole] = useState<'Admin' | 'Viewer' | null>(null);
     const [collabEmail, setCollabEmail] = useState('');
 
-    const fetchTasks = async () => {
+    const fetchTasks = useCallback(async () => {
         if (!id) return;
         const snapshot = await getDocs(collection(db, 'lists', id, 'tasks'));
         setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Task[]);
-    };
+    }, [id]);
 
-    const fetchRole = async () => {
+    const fetchRole = useCallback(async () => {
         if (!id || !user) return;
         const snap = await getDoc(doc(db, 'lists', id));
         const data = snap.data();
@@ -39,7 +39,7 @@ export default function ListDetails() {
             const collab = data.collaborators?.find((c: any) => c.email === user.email);
             setRole(collab?.role || null);
         }
-    };
+    }, [id, user]);
 
     const addTask = async () => {
         if (!newTitle.trim() || !id) return;
@@ -79,7 +79,7 @@ export default function ListDetails() {
     useEffect(() => {
         fetchTasks();
         fetchRole();
-    }, [id, user]);
+    }, [id, user, fetchTasks, fetchRole]);
 
     return (
         <div className="p-4 max-w-xl mx-auto">
