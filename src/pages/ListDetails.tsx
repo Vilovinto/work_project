@@ -25,6 +25,7 @@ export default function ListDetails() {
     const [newDesc, setNewDesc] = useState('');
     const [role, setRole] = useState<Role | null>(null);
     const [collabEmail, setCollabEmail] = useState('');
+    const [collabRole, setCollabRole] = useState<Role>('Viewer');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -32,7 +33,7 @@ export default function ListDetails() {
     const fetchListDetailsAndTasks = useCallback(() => {
         if (!id || !user) {
             setIsLoading(false);
-            return;
+            return () => {};
         }
 
         setError(null);
@@ -84,10 +85,7 @@ export default function ListDetails() {
     }, [id, user]);
 
     useEffect(() => {
-        const unsubscribe = fetchListDetailsAndTasks();
-        return () => {
-            if (unsubscribe) unsubscribe();
-        };
+        return fetchListDetailsAndTasks();
     }, [fetchListDetailsAndTasks]);
 
     const addTask = async () => {
@@ -168,9 +166,10 @@ export default function ListDetails() {
         try {
             const listRef = doc(db, 'lists', id);
             await updateDoc(listRef, {
-                collaborators: arrayUnion({ email: collabEmail, role: 'Viewer' })
+                collaborators: arrayUnion({ email: collabEmail, role: collabRole })
             });
             setCollabEmail('');
+            setCollabRole('Viewer');
         } catch (err: unknown) {
             console.error("Error adding collaborator:", err);
             if (err instanceof FirebaseError) {
@@ -250,13 +249,21 @@ export default function ListDetails() {
                                 </Button>
                             )}
                         </div>
-                        <div className="flex space-x-4">
+                        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                             <Input
                                 placeholder="Collaborator email"
                                 value={collabEmail}
                                 onChange={e => setCollabEmail(e.target.value)}
                                 className="flex-1"
                             />
+                            <select
+                                value={collabRole}
+                                onChange={e => setCollabRole(e.target.value as Role)}
+                                className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-colors bg-white text-gray-800"
+                            >
+                                <option value="Viewer">Viewer</option>
+                                <option value="Admin">Admin</option>
+                            </select>
                             <Button onClick={addCollaborator} className="bg-green-600 text-white hover:bg-green-700" disabled={isLoading}>
                                 Add Collaborator
                             </Button>
@@ -274,7 +281,6 @@ export default function ListDetails() {
                             onDelete={role === 'Admin' ? () => removeTask(task.id) : undefined}
                             onEdit={role === 'Admin' ? () => startEditingTask(task) : undefined}
                             isAdmin={role === 'Admin'}
-                            isViewer={role === 'Viewer'}
                         />
                     ))}
                 </div>
