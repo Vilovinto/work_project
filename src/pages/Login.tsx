@@ -36,16 +36,16 @@ export default function Login() {
     };
 
     return (
-        <div className="max-h-full bg-cover bg-center" style={{ backgroundImage: `url(${BackgroundImage})` }}>
-            <div className="max-h-full flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url(${BackgroundImage})` }}>
+            <div className="w-full h-full flex items-center justify-center p-4 bg-black bg-opacity-50">
                 <div className="bg-white bg-opacity-80 rounded-2xl shadow-xl w-full max-w-md p-8 space-y-6 backdrop-blur-sm">
-                    <h2 className="text-3xl font-bold text-center text-neutral-400">Login</h2>
+                    <h2 className="text-3xl font-bold text-center text-gray-800">Login</h2>
                     {error && <p className="text-red-500 text-sm text-center bg-red-50 p-3 rounded-lg">{error}</p>}
                     <form onSubmit={handleLogin} className="space-y-5">
                         <div>
                             <input
                                 type="email"
-                                placeholder="Email"
+                                placeholder="Username"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 outline-none bg-gray-50 bg-opacity-80 text-gray-800 placeholder-gray-400"

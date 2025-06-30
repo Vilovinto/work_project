@@ -11,13 +11,18 @@ export default function App() {
     return (
         <AuthProvider>
             <Router>
-                <Header />
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                    <Route path="/list/:id" element={<ProtectedRoute><ListDetails /></ProtectedRoute>} />
-                </Routes>
+                <div className="flex flex-col h-screen overflow-hidden">
+                    <Header />
+
+                    <div className="flex-grow">
+                        <Routes>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                            <Route path="/list/:id" element={<ProtectedRoute><ListDetails /></ProtectedRoute>} />
+                        </Routes>
+                    </div>
+                </div>
             </Router>
         </AuthProvider>
     );
