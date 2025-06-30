@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -9,20 +9,27 @@ export default function Login() {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         try {
             await signInWithEmailAndPassword(auth, email, password);
             navigate('/');
         } catch (err: any) {
-            setError(err.message);
+            console.error("Login error:", err.code, err.message);
+            if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found') {
+                setError('Invalid email or password.');
+            } else if (err.code === 'auth/wrong-password') {
+                setError('Invalid password.');
+            } else {
+                setError('Login error: ' + err.message);
+            }
         }
     };
 
     return (
         <div className="flex justify-center items-center h-screen bg-gray-100">
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
+            <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
                 {error && <p className="text-red-500 mb-4">{error}</p>}
                 <input
@@ -47,6 +54,12 @@ export default function Login() {
                 >
                     Login
                 </button>
+                <p className="mt-4 text-center text-gray-600">
+                    Don't have an account?{' '}
+                    <Link to="/register" className="text-blue-500 hover:underline">
+                        Register
+                    </Link>
+                </p>
             </form>
         </div>
     );

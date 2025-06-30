@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Register() {
     const [name, setName] = useState('');
@@ -57,6 +57,12 @@ export default function Register() {
                 >
                     Register
                 </button>
+                <p className="mt-4 text-center text-gray-600">
+                    Already have an account?{' '}
+                    <Link to="/login" className="text-blue-500 hover:underline">
+                        Login
+                    </Link>
+                </p>
             </form>
         </div>
     );
