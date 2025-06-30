@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
+import { FirebaseError } from 'firebase/app';
 
 export default function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -17,8 +18,14 @@ export default function Register() {
             const res = await createUserWithEmailAndPassword(auth, email, password);
             await updateProfile(res.user, { displayName: name });
             navigate('/');
-        } catch (err: any) { // or catch (err: Error)
-            setError(err.message);
+        } catch (err: unknown) {
+            console.error("Registration error:", err);
+
+            if (err instanceof FirebaseError) {
+                setError('Registration error: ' + err.message);
+            } else {
+                setError('An unknown error occurred during registration.');
+            }
         }
     };
 

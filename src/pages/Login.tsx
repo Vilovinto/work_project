@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
+import { FirebaseError } from 'firebase/app';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -15,14 +16,19 @@ export default function Login() {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             navigate('/');
-        } catch (err: any) {
-            console.error("Login error:", err.code, err.message);
-            if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found') {
-                setError('Invalid email or password.');
-            } else if (err.code === 'auth/wrong-password') {
-                setError('Invalid password.');
+        } catch (err: unknown) {
+            console.error("Login error:", err);
+
+            if (err instanceof FirebaseError) {
+                if (err.code === 'auth/invalid-credential' ||
+                    err.code === 'auth/user-not-found' ||
+                    err.code === 'auth/wrong-password') {
+                    setError('Invalid login or password.');
+                } else {
+                    setError('Login error: ' + err.message);
+                }
             } else {
-                setError('Login error: ' + err.message);
+                setError('An unknown error occurred during login.');
             }
         }
     };
