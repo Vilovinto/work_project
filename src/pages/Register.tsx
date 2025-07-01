@@ -4,7 +4,7 @@ import { auth } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 //@ts-ignore
-import BackgroundImage from '../background/sky.jpg' // Assuming the same background image
+import BackgroundImage from '../background/sky.jpg'
 
 export default function Register() {
     const [name, setName] = useState('');
